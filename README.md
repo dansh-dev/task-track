@@ -2,6 +2,10 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.6.
 
+Development over this application happened over a 24 hour period, I've skipped the implementation of unit tests. More features will be coming soon.
+
+Thank you for your consideration!
+
 ## Development server
 
 To start a local development server, run:
