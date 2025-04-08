@@ -3,7 +3,7 @@ import { Firestore, collection, doc, addDoc, updateDoc, deleteDoc, setDoc, getDo
 import { Project } from '../models/project.model';
 import { Task } from '../models/task.model';
 import { Auth } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import { map, Observable, combineLatest } from 'rxjs';
 import { collectionSnapshots, docSnapshots } from '@angular/fire/firestore/lite';
 import { query, orderBy, where } from '@angular/fire/firestore';
 
@@ -77,15 +77,27 @@ export class ProjectService {
     // Reference to the projects collection
     const projectsRef = collection(this.firestore, 'projects');
   
-    // Query to filter projects owned by the user or shared with the user
-    const accessibleProjectsQuery = query(
-      projectsRef,
-      where('ownerId', '==', uid), // Projects owned by the user
-      where('sharedWith', 'array-contains', uid) // Projects shared with the user
-    );
+    // Query to fetch projects owned by the user
+    const ownedProjectsQuery = query(projectsRef, where('ownerId', '==', uid));
   
-    // Fetch and return the filtered projects
-    return collectionData(accessibleProjectsQuery, { idField: 'id' }) as Observable<Project[]>;
+    // Query to fetch projects shared with the user
+    const sharedProjectsQuery = query(projectsRef, where('sharedWith', 'array-contains', uid));
+  
+    // Combine the results of both queries
+    const ownedProjects$ = collectionData(ownedProjectsQuery, { idField: 'id' }) as Observable<Project[]>;
+    const sharedProjects$ = collectionData(sharedProjectsQuery, { idField: 'id' }) as Observable<Project[]>;
+  
+    // Merge the two observables and remove duplicates
+    return combineLatest([ownedProjects$, sharedProjects$]).pipe(
+      map(([ownedProjects, sharedProjects]) => {
+        const allProjects = [...ownedProjects, ...sharedProjects];
+        // Remove duplicates by project ID
+        const uniqueProjects = allProjects.filter(
+          (project, index, self) => self.findIndex(p => p.id === project.id) === index
+        );
+        return uniqueProjects;
+      })
+    );
   }
 
 getTasks(projectId: string): Observable<Task[]> {
@@ -94,3 +106,4 @@ getTasks(projectId: string): Observable<Task[]> {
   return collectionData(tasksQuery, { idField: 'id' }) as Observable<Task[]>;
 }
 }
+
