@@ -150,10 +150,12 @@
       <div>
         <h2>
           {{ task.title }}
+          -
+          {{ task.completed? 'Completed' : 'Not Completed' }}
         </h2>
         <p class="text-black text-xl">Priority - {{ task.priority }}</p>
+        <p class="text-gray-700">{{ task.dueDate }}</p>
         <p class="text-gray-700">{{ task.description }}</p>
-        <p class="text-gray-700">{{ task.dueDate.getDate  }}</p>
         <mat-chip-set *ngIf="task.tags.length > 1">
           <mat-chip
             *ngFor="let tag of task.tags"
@@ -189,10 +191,12 @@
       <div>
         <h2>
           {{ task.title }}
+          -
+          {{ task.completed? 'Completed' : 'Not Completed' }}
         </h2>
         <p class="text-black text-xl">Priority - {{ task.priority }}</p>
+        <p class="text-gray-700">{{ task.dueDate }}</p>
         <p class="text-gray-700">{{ task.description }}</p>
-        <p class="text-gray-700">{{ task.dueDate.getDate }}</p>
         <mat-chip-set *ngIf="task.tags.length > 1">
           <mat-chip
             *ngFor="let tag of task.tags"
