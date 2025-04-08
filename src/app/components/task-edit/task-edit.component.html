@@ -26,14 +26,15 @@
         placeholder="Task Description"
         class="textarea textarea-bordered w-50 h-40 bg-gray-100 rounded-lg p-2 ml-3 mt-3"
       ></textarea>
-    </div>
-   
-    <div class="flex h-fit align-middle mb-3 mt-3">
       <textarea
         [(ngModel)]="tags"
         placeholder="Tags - Add each tag separated by a comma"
-        class="textarea textarea-bordered w-50 h-10 bg-gray-100 rounded-lg p-2 ml-3 mt-3"
+        class="textarea textarea-bordered w-50 h-10 mx-1 bg-gray-100 rounded-lg p-2 ml-3 mt-3"
       ></textarea>
+    </div>
+   
+    <div class="flex h-fit align-middle mb-3 mt-3">
+      
       <div class="w-full mt-3 flex justify-end">
         <mat-button-toggle  class="mx-3" (click)="taskComplete()">Toggle Completion</mat-button-toggle>
         <button mat-raised-button color="accent" (click)="router.navigate(['tasks/'+projectID])">
