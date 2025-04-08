@@ -1,0 +1,51 @@
+<div
+    class="mt-6 bg-white p-4 rounded-md shadow-md mb-3"
+  >
+    <h4 class="text-lg font-semibold mb-4">Update a Task</h4>
+
+    <div class="flex h-fit align-middle mb-3 mt-3">
+      <p>Task Priority:</p>
+      <select
+        [(ngModel)]="editedTask.priority"
+        class="select select-bordered w-fit bg-gray-100 rounded-lg p-2 mx-2 mr-3"
+      >
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+      </select>
+    </div>
+
+    <input
+      [(ngModel)]="editedTask.title"
+      placeholder="Task Title"
+      class="input input-bordered w-45 bg-gray-100 rounded-lg p-2 ml-3"
+    />
+    <div class="flex h-fit align-middle mb-3 mt-3">
+        <textarea
+        [(ngModel)]="editedTask.description"
+        placeholder="Task Description"
+        class="textarea textarea-bordered w-50 h-40 bg-gray-100 rounded-lg p-2 ml-3 mt-3"
+      ></textarea>
+    </div>
+   
+    <div class="flex h-fit align-middle mb-3 mt-3">
+      <textarea
+        [(ngModel)]="tags"
+        placeholder="Tags - Add each tag separated by a comma"
+        class="textarea textarea-bordered w-50 h-10 bg-gray-100 rounded-lg p-2 ml-3 mt-3"
+      ></textarea>
+      <div class="w-full mt-3 flex justify-end">
+        <button mat-raised-button color="accent" (click)="router.navigate(['tasks/'+projectID])">
+          Cancel
+        </button>
+        <button
+          mat-raised-button
+          color="accent"
+          class="mx-3"
+          (click)="updateTask()"
+        >
+          Update Task
+        </button>
+      </div>
+    </div>
+  </div>

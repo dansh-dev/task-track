@@ -1,0 +1,222 @@
+<div class="mt-8 mx-15 bg-white p-6 rounded-md shadow-lg">
+  <mat-card-actions class="flex">
+    <button
+      mat-raised-button
+      class="flex justify-center"
+      (click)="router.navigate(['/projects'])"
+    >
+      <mat-icon class="mx-auto">close</mat-icon>
+    </button>
+  </mat-card-actions>
+  <h1 class="text-2xl ml-3 font-semibold mb-4 mt-4">
+    {{ (projects$ | async)?.name }}
+  </h1>
+  <div class="flex w-full justify-end">
+    <button
+      mat-raised-button
+      class="flex justify-center mb-3 mx-3"
+      (click)="editProject(projectID)"
+    >
+      <mat-icon class="mx-auto">edit</mat-icon>
+    </button>
+    <button
+      mat-raised-button
+      class="flex justify-center mb-3"
+      (click)="addingTask()"
+    >
+      <mat-icon class="mx-auto">add</mat-icon>
+    </button>
+  </div>
+  <div
+    *ngIf="(tasks$ | async)?.length === 0"
+    class="text-center mx-1 text-gray-500"
+  >
+    <button
+      mat-raised-button
+      class="flex justify-center"
+      (click)="addingTask()"
+    >
+      Add a Task to get started
+      <mat-icon class="mx-auto">add</mat-icon>
+    </button>
+  </div>
+  <!-- Add Task Form -->
+  <div
+    *ngIf="isCreatingTask"
+    class="mt-6 bg-white p-4 rounded-md shadow-md mb-3"
+  >
+    <h4 class="text-lg font-semibold mb-4">Add a New Task</h4>
+
+    <div class="flex h-fit align-middle mb-3 mt-3">
+      <p>Task Priority:</p>
+      <select
+        [(ngModel)]="newTask.priority"
+        class="select select-bordered w-fit bg-gray-100 rounded-lg p-2 mx-2 mr-3"
+      >
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+      </select>
+    </div>
+
+    <input
+      [(ngModel)]="newTask.title"
+      placeholder="Task Title"
+      class="input input-bordered w-45 bg-gray-100 rounded-lg p-2 ml-3"
+    />
+    <div class="flex h-fit align-middle mb-3 mt-3">
+      <p>Due Date:</p>
+      <input
+        [(ngModel)]="newTask.dueDate"
+        placeholder="Due Date"
+        type="date"
+        class="input input-bordered w-40 bg-gray-100 rounded-lg p-2 mx-3"
+      />
+    </div>
+    <textarea
+      [(ngModel)]="newTask.description"
+      placeholder="Task Description"
+      class="textarea textarea-bordered w-50 h-40 bg-gray-100 rounded-lg p-2 ml-3 mt-3"
+    ></textarea>
+    <div class="flex h-fit align-middle mb-3 mt-3">
+      <textarea
+        [(ngModel)]="tags"
+        placeholder="Tags - Add each tag separated by a comma"
+        class="textarea textarea-bordered w-50 h-10 bg-gray-100 rounded-lg p-2 ml-3 mt-3"
+      ></textarea>
+      <div class="w-full mt-3 flex justify-end">
+        <button mat-raised-button color="accent" (click)="addingTask()">
+          Cancel
+        </button>
+        <button
+          mat-raised-button
+          color="accent"
+          class="mx-3"
+          (click)="addTask()"
+        >
+          Add Task
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngFor="let task of tasks$ | async" class="mb-4">
+    <div
+      *ngIf="task.priority === 'Low'"
+      class="flex justify-between items-center bg-green-100 p-4 rounded-md"
+    >
+      <div>
+        <h2>
+          {{ task.title }}
+        </h2>
+
+        <p class="text-black text-xl">Priority - {{ task.priority }}</p>
+        <p class="text-gray-700">{{ task.dueDate }}</p>
+        <p class="text-gray-700">{{ task.description }}</p>
+        <mat-chip-set *ngIf="task.tags.length > 1">
+          <mat-chip
+            *ngFor="let tag of task.tags"
+            class="bg-gray-200 text-black"
+            [removable]="true"
+            >{{ tag }}</mat-chip
+          >
+        </mat-chip-set>
+      </div>
+      <div>
+        <button
+          mat-raised-button
+          class="flex justify-center mb-3 mx-3"
+          (click)="editTask(task)"
+        >
+          <mat-icon class="mx-auto">edit</mat-icon>
+        </button>
+
+        <button
+          mat-raised-button
+          class="flex justify-center mb-3"
+          (click)="deleteTask(task.id!)"
+        >
+          <mat-icon class="mx-auto">delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div
+      *ngIf="task.priority === 'Medium'"
+      class="flex justify-between items-center bg-amber-100 p-4 rounded-md"
+    >
+      <div>
+        <h2>
+          {{ task.title }}
+        </h2>
+        <p class="text-black text-xl">Priority - {{ task.priority }}</p>
+        <p class="text-gray-700">{{ task.description }}</p>
+        <p class="text-gray-700">{{ task.dueDate.getDate  }}</p>
+        <mat-chip-set *ngIf="task.tags.length > 1">
+          <mat-chip
+            *ngFor="let tag of task.tags"
+            class="bg-gray-200 text-black"
+            [removable]="true"
+            >{{ tag }}</mat-chip
+          >
+        </mat-chip-set>
+      </div>
+      <div>
+        <button
+          mat-raised-button
+          class="flex justify-center mb-3 mx-3"
+          (click)="editTask(task)"
+        >
+          <mat-icon class="mx-auto">edit</mat-icon>
+        </button>
+
+        <button
+          mat-raised-button
+          class="flex justify-center mb-3"
+          (click)="deleteTask(task.id!)"
+        >
+          <mat-icon class="mx-auto">delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div
+      *ngIf="task.priority === 'High'"
+      class="flex justify-between items-center bg-red-100 p-4 rounded-md"
+    >
+      <div>
+        <h2>
+          {{ task.title }}
+        </h2>
+        <p class="text-black text-xl">Priority - {{ task.priority }}</p>
+        <p class="text-gray-700">{{ task.description }}</p>
+        <p class="text-gray-700">{{ task.dueDate.getDate }}</p>
+        <mat-chip-set *ngIf="task.tags.length > 1">
+          <mat-chip
+            *ngFor="let tag of task.tags"
+            class="bg-gray-200 text-black"
+            [removable]="true"
+            >{{ tag }}</mat-chip
+          >
+        </mat-chip-set>
+      </div>
+      <div>
+        <button
+          mat-raised-button
+          class="flex justify-center mb-3 mx-3"
+          (click)="editTask(task)"
+        >
+          <mat-icon class="mx-auto">edit</mat-icon>
+        </button>
+
+        <button
+          mat-raised-button
+          class="flex justify-center mb-3"
+          (click)="deleteTask(task.id!)"
+        >
+          <mat-icon class="mx-auto">delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

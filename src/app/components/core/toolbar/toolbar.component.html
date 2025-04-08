@@ -1,0 +1,26 @@
+<style>
+    .example-spacer {
+  flex: 1 1 auto;
+}
+</style>
+
+<mat-toolbar class="p-2">
+  
+    <span><img (click)="navToHome()" src="/tasktrack.png" width="60" alt=""></span>
+    <span class="example-spacer"></span>
+  <ng-container *ngIf="authService.user$ | async as user">
+    <button mat-button [matMenuTriggerFor]="menu">
+      <img [src]="user.photoURL" alt="Profile" class="w-8 h-8 rounded-full object-cover" />
+    </button>
+    <mat-menu class="p-2 mr-1" #menu="matMenu">
+        <p >{{ user.displayName }}👋</p>
+        <button mat-flat-button [cdkCopyToClipboard]="user.uid">Copy User ID</button>
+      <button mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon>Logout</button>
+    </mat-menu>
+  </ng-container>
+
+  <!-- Login button if user is not logged in -->
+  <ng-container *ngIf="!(authService.user$ | async)">
+    <button mat-button routerLink="/login">Login</button>
+  </ng-container>
+  </mat-toolbar>
