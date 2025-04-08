@@ -4,7 +4,7 @@ import { Task } from '../../models/task.model';
 import { filter, Observable } from 'rxjs';
 
 import { ProjectService } from '../../services/project.service';
-import { TaskService } from '../../services/task.service';
+
 import { AuthService } from '../../services/auth.service';
 import { Auth } from '@angular/fire/auth';
 
@@ -51,7 +51,6 @@ export class TaskEditComponent implements OnInit {
 
   constructor(
     private projectService: ProjectService,
-    private taskService: TaskService,
     public router: Router,
     public authService: AuthService,
     private auth: Auth

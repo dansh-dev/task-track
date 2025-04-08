@@ -5,7 +5,8 @@ import { Task } from '../models/task.model';
 import { Auth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { collectionSnapshots, docSnapshots } from '@angular/fire/firestore/lite';
-import { query, orderBy } from '@angular/fire/firestore';
+import { query, orderBy, where } from '@angular/fire/firestore';
+
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
@@ -50,7 +51,6 @@ export class ProjectService {
     });
   }
 
-  // 🔹 Add a task to a project
   async addTask(projectId: string, task: Omit<Task, 'creationDate'>): Promise<void> {
     const newTask: Task = {
       ...task,
@@ -61,25 +61,31 @@ export class ProjectService {
     await addDoc(taskCollection, newTask);
   }
 
-  // 🔹 Update a task
   async updateTask(projectId: string, taskId: string, updates: Partial<Task>): Promise<void> {
     const ref = doc(this.firestore, `projects/${projectId}/tasks/${taskId}`);
     await updateDoc(ref, updates);
   }
 
-  // 🔹 Delete a task
   async deleteTask(projectId: string, taskId: string): Promise<void> {
     const ref = doc(this.firestore, `projects/${projectId}/tasks/${taskId}`);
     await deleteDoc(ref);
   }
 
-  // 🔹 Get all projects the user owns or is shared with
   getAccessibleProjects(): Observable<Project[]> {
     const uid = this.userId();
-
+  
+    // Reference to the projects collection
     const projectsRef = collection(this.firestore, 'projects');
-    return collectionData(projectsRef, { idField: 'id' }) as Observable<Project[]>;
-    // You can add filtering in your component or expand this method with filtering logic
+  
+    // Query to filter projects owned by the user or shared with the user
+    const accessibleProjectsQuery = query(
+      projectsRef,
+      where('ownerId', '==', uid), // Projects owned by the user
+      where('sharedWith', 'array-contains', uid) // Projects shared with the user
+    );
+  
+    // Fetch and return the filtered projects
+    return collectionData(accessibleProjectsQuery, { idField: 'id' }) as Observable<Project[]>;
   }
 
 getTasks(projectId: string): Observable<Task[]> {

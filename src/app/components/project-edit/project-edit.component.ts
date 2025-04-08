@@ -44,7 +44,6 @@ export class ProjectEditComponent implements OnInit {
   
   constructor(
     private projectService: ProjectService,
-    private taskService: TaskService,
     public router: Router,
     public authService: AuthService,
     private auth: Auth

@@ -50,7 +50,6 @@ export class ProjectListComponent implements OnInit {
 
   constructor(
     private projectService: ProjectService,
-    private taskService: TaskService,
     private router: Router
   ) {}
 
