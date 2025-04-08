@@ -37,13 +37,13 @@ export class ProjectService {
     await updateDoc(ref, updates);
   }
 
-  // 🔹 Delete a project
+
   async deleteProject(projectId: string): Promise<void> {
     const ref = doc(this.firestore, `projects/${projectId}`);
     await deleteDoc(ref);
   }
 
-  // 🔹 Share a project with another user
+
   async shareProject(projectId: string, userIdToShareWith: string): Promise<void> {
     const ref = doc(this.firestore, `projects/${projectId}`);
     await updateDoc(ref, {

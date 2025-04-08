@@ -93,14 +93,12 @@ export class ProjectListComponent implements OnInit {
   editProject(project: Project) {
     this.router.navigate(['/pedit', project.id]); // Navigate to the project edit page
   }
-  // 🔹 Delete a project
   deleteProject(projectId: string) {
     if (confirm('Are you sure you want to delete this project?')) {
       this.projectService.deleteProject(projectId);
     }
   }
 
-  // 🔹 Share a project with another user
   shareProject(projectId: string, userId: string) {
     this.projectService.shareProject(projectId, userId);
   }
