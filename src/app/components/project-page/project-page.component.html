@@ -108,6 +108,8 @@
       <div>
         <h2>
           {{ task.title }}
+          -
+          {{ task.completed? 'Completed' : 'Not Completed' }}
         </h2>
 
         <p class="text-black text-xl">Priority - {{ task.priority }}</p>

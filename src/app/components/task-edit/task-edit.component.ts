@@ -11,6 +11,7 @@ import { Auth } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { MatCard } from '@angular/material/card';
 import { MatCardActions } from '@angular/material/card';
 
@@ -25,6 +26,7 @@ import { Router } from '@angular/router';
     CommonModule,
     MatButton,
     FormsModule,
+    MatButtonToggleModule
   ],
   templateUrl: './task-edit.component.html',
   styleUrl: './task-edit.component.css',
@@ -69,7 +71,7 @@ export class TaskEditComponent implements OnInit {
       const task = tasks.find((t) => t.id === this.taskID);
       if (task) {
         this.editedTask = task; // Populate the editedTask object with the retrieved task
-
+        console.log(task);
         this.tags = task.tags.join(', '); // Convert tags array to a comma-separated string
       } else {
         console.error('Task not found');
@@ -86,5 +88,8 @@ export class TaskEditComponent implements OnInit {
       .then(() => {
         this.router.navigate(['/tasks', this.projectID]); // Redirect to the project page
       });
+  }
+  taskComplete() {
+    this.editedTask.completed = !this.editedTask.completed; // Toggle the completed status
   }
 }
